@@ -3,146 +3,193 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Stockbridge | Investment Modeler</title>
+    <title>Stockbridge | Sovereign Tier Terminal</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;800&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
-        body { background: #050505; font-family: 'Plus Jakarta Sans', sans-serif; color: #fff; }
-        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; }
-        /* Professional Cash Input Fields */
-        .cash-input { background: #111; border: 2px solid #222; border-radius: 16px; padding: 16px; width: 100%; color: #3b82f6; font-family: 'JetBrains Mono'; font-size: 20px; font-weight: bold; outline: none; transition: all 0.2s; }
-        .cash-input:focus { border-color: #3b82f6; background: #000; box-shadow: 0 0 20px rgba(59, 130, 246, 0.2); }
-        .neon-blue { color: #3b82f6; text-shadow: 0 0 15px rgba(59, 130, 246, 0.5); }
-        .label-text { font-size: 11px; font-weight: 800; color: #666; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; display: block; }
+        body { background: #000; font-family: 'Inter', sans-serif; color: #fff; -webkit-tap-highlight-color: transparent; }
+        .sov-card { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 4px; border-left: 2px solid #333; }
+        .input-box { background: #111; border: 1px solid #222; border-radius: 4px; padding: 12px; width: 100%; color: #3b82f6; font-family: 'JetBrains Mono'; font-size: 18px; outline: none; }
+        .input-box:focus { border-color: #3b82f6; }
+        .stat-label { font-size: 9px; font-weight: 800; color: #555; text-transform: uppercase; letter-spacing: 0.15em; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        .delta-positive { color: #10b981; }
+        .attrition-card { border-left-color: #ef4444; background: linear-gradient(90deg, rgba(239, 68, 68, 0.05) 0%, transparent 100%); }
+        .equity-card { border-left-color: #3b82f6; background: linear-gradient(90deg, rgba(59, 130, 246, 0.05) 0%, transparent 100%); }
     </style>
 </head>
-<body class="p-4 md:p-10 pb-24">
+<body class="p-4 pb-20 max-w-lg mx-auto">
 
-    <div class="max-w-xl mx-auto mb-8 space-y-4">
-        <div class="flex justify-between items-end">
-            <div>
-                <h1 class="text-2xl font-black italic tracking-tighter">STOCKBRIDGE <span class="text-blue-500 font-normal">CAPITAL</span></h1>
-                <p class="label-text">iBuildpro Portoflio Node</p>
-            </div>
-            <div class="text-right">
-                <p class="label-text">Final Val (B5)</p>
-                <p class="text-3xl font-black neon-blue" id="final-val">£38.4M</p>
-            </div>
+    <header class="flex justify-between items-start mb-8 border-b border-white/10 pb-6">
+        <div>
+            <h1 class="text-xl font-black tracking-tighter uppercase italic">Stockbridge <span class="text-blue-500 font-normal">Sovereign</span></h1>
+            <p class="stat-label">Portfolio: iBuildpro Holdings</p>
+        </div>
+        <div class="text-right">
+            <p class="stat-label">Total Payout (B5)</p>
+            <p class="text-3xl font-black mono text-white tracking-tighter" id="top-val">£38.4M</p>
+        </div>
+    </header>
+
+    <div class="grid grid-cols-2 gap-3 mb-6">
+        <div class="sov-card p-4 equity-card">
+            <p class="stat-label">Baseline Shares</p>
+            <p class="text-lg font-black mono">144,092</p>
+        </div>
+        <div class="sov-card p-4">
+            <p class="stat-label">Net ROI</p>
+            <p class="text-lg font-black mono text-emerald-500" id="roi-stat">76.8x</p>
         </div>
     </div>
 
-    <main class="max-w-xl mx-auto space-y-6">
-        
-        <div class="glass p-6">
-            <p class="label-text text-center mb-6">Growth Trajectory: Base vs Active</p>
-            <div class="h-64">
-                <canvas id="growthChart"></canvas>
+    <section class="sov-card p-5 mb-8">
+        <div class="flex justify-between items-center mb-6">
+            <span class="stat-label">Holding Attrition vs Growth</span>
+            <div class="flex gap-4">
+                <span class="text-[8px] font-bold text-slate-600 uppercase">-- Baseline</span>
+                <span class="text-[8px] font-bold text-blue-500 uppercase">● Simulated</span>
             </div>
         </div>
+        <div class="h-48">
+            <canvas id="sovChart"></canvas>
+        </div>
+    </section>
 
-        <div class="glass p-8 space-y-8">
-            <h2 class="text-xs font-black uppercase tracking-widest text-slate-400">Model New Investment</h2>
-            
-            <div class="space-y-6">
-                <div>
-                    <label class="label-text">Add Cash @ Seed Round (£11.68/sh)</label>
-                    <div class="relative">
-                        <span class="absolute left-4 top-4 text-slate-500 font-mono">£</span>
-                        <input type="number" id="cash-seed" value="0" class="cash-input pl-10" placeholder="0.00">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="label-text">Add Cash @ Bank Round (£58.40/sh)</label>
-                    <div class="relative">
-                        <span class="absolute left-4 top-4 text-slate-500 font-mono">£</span>
-                        <input type="number" id="cash-bank" value="0" class="cash-input pl-10" placeholder="0.00">
-                    </div>
+    <section class="space-y-4 mb-8">
+        <div class="flex justify-between items-center px-1">
+            <h3 class="stat-label">Deployment Modeling</h3>
+            <button onclick="reset()" class="text-[10px] font-black text-slate-600 uppercase">Reset</button>
+        </div>
+        <div class="sov-card p-5 space-y-6">
+            <div>
+                <label class="stat-label block mb-2">Seed Allocation (PPS £11.68)</label>
+                <div class="relative">
+                    <span class="absolute left-3 top-3 text-slate-600 font-mono">£</span>
+                    <input type="number" id="in-seed" value="0" class="input-box pl-8" placeholder="0">
                 </div>
             </div>
-
-            <div class="p-6 bg-white/5 rounded-2xl space-y-4 border border-white/5">
-                <div class="flex justify-between items-center">
-                    <span class="label-text">Simulated Stake %</span>
-                    <span class="font-mono text-lg font-bold text-white" id="final-own">2.93%</span>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="label-text">New Shares Purchased</span>
-                    <span class="font-mono text-lg font-bold text-blue-400" id="new-shares-count">0</span>
-                </div>
-                <div class="flex justify-between items-center pt-2 border-t border-white/10">
-                    <span class="label-text">Aggregated Holding</span>
-                    <span class="font-mono text-lg font-bold text-emerald-400" id="aggregated-shares">144,092</span>
+            <div>
+                <label class="stat-label block mb-2">Bank Allocation (PPS £58.40)</label>
+                <div class="relative">
+                    <span class="absolute left-3 top-3 text-slate-600 font-mono">£</span>
+                    <input type="number" id="in-bank" value="0" class="input-box pl-8" placeholder="0">
                 </div>
             </div>
         </div>
+    </section>
 
-        <p class="text-center text-[10px] text-slate-600 uppercase font-bold tracking-widest py-6">
-            Prior Position: 144,092 Shares Fixed
-        </p>
-    </main>
+    <section class="space-y-3 mb-10">
+        <p class="stat-label px-1 mb-2">Per-Round Position Worth</p>
+        <div id="round-cards" class="space-y-3">
+            </div>
+    </section>
+
+    <section class="space-y-3 mb-12">
+        <p class="stat-label px-1 mb-2 text-rose-500">Balance Reduction Ledger (Tranches 1-5)</p>
+        <div id="balance-cards" class="space-y-2">
+            </div>
+    </section>
 
     <script>
-        const priorShares = 144092;
+        const initialS = 144092;
+        const initialB = 500000;
         const rounds = [
-            { name: "PS+", pps: 3.47, total: 2825331 },
-            { name: "Seed", pps: 11.68, total: 3424646 },
-            { name: "Bank", pps: 58.40, total: 4452046 },
-            { name: "B1", pps: 58.40, total: 4657571 },
-            { name: "B2", pps: 96.64, total: 4761071 },
-            { name: "B3", pps: 142.77, total: 4831121 },
-            { name: "B4", pps: 201.79, total: 4880661 },
-            { name: "B5", pps: 266.39, total: 4918211 }
+            { name: "Pre-Seed Plus", p: 3.47, fd: 2825331, type: 'equity' },
+            { name: "Seed Round", p: 11.68, fd: 3424646, type: 'equity' },
+            { name: "Bank Series A", p: 58.40, fd: 4452046, type: 'equity' },
+            { name: "Balance Round 1", p: 58.40, fd: 4657571, type: 'balance' },
+            { name: "Balance Round 2", p: 96.64, fd: 4761071, type: 'balance' },
+            { name: "Balance Round 3", p: 142.77, fd: 4831121, type: 'balance' },
+            { name: "Balance Round 4", p: 201.79, fd: 4880661, type: 'balance' },
+            { name: "Balance Round 5", p: 266.39, fd: 4918211, type: 'balance' }
         ];
 
         let chart;
 
         function refresh() {
-            const seedCash = parseFloat(document.getElementById('cash-seed').value) || 0;
-            const bankCash = parseFloat(document.getElementById('cash-bank').value) || 0;
+            const sCash = parseFloat(document.getElementById('in-seed').value) || 0;
+            const bCash = parseFloat(document.getElementById('in-bank').value) || 0;
+            const nS = Math.floor(sCash / 11.68);
+            const nB = Math.floor(bCash / 58.40);
+            const tShares = initialS + nS + nB;
+            const tBasis = initialB + sCash + bCash;
 
-            const newSeedShares = Math.floor(seedCash / 11.68);
-            const newBankShares = Math.floor(bankCash / 58.40);
-            const activeTotalShares = priorShares + newSeedShares + newBankShares;
-
-            // Update Text UI
-            document.getElementById('new-shares-count').innerText = (newSeedShares + newBankShares).toLocaleString();
-            document.getElementById('aggregated-shares').innerText = activeTotalShares.toLocaleString();
-            
+            // Global KPI
             const b5 = rounds[7];
-            document.getElementById('final-val').innerText = "£" + ((activeTotalShares * b5.pps) / 1000000).toFixed(1) + "M";
-            document.getElementById('final-own').innerText = ((activeTotalShares / b5.total) * 100).toFixed(2) + "%";
+            const finalVal = tShares * b5.p;
+            document.getElementById('top-val').innerText = "£" + (finalVal/1000000).toFixed(1) + "M";
+            document.getElementById('roi-stat').innerText = (finalVal / tBasis).toFixed(1) + "x";
 
-            // Update Chart Data
-            chart.data.datasets[1].data = rounds.map(r => (activeTotalShares / r.total) * 100);
+            // Equity Cards (PS, Seed, Bank)
+            const roundCont = document.getElementById('round-cards');
+            roundCont.innerHTML = '';
+            rounds.filter(r => r.type === 'equity').forEach(r => {
+                const val = (tShares * r.p).toLocaleString('en-GB', { style: 'currency', currency: 'GBP', maximumFractionDigits: 0 });
+                roundCont.innerHTML += `
+                    <div class="sov-card p-4 equity-card flex justify-between items-center">
+                        <div>
+                            <p class="stat-label text-blue-400">${r.name}</p>
+                            <p class="text-xs font-bold mono mt-1">PPS £${r.p.toFixed(2)}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm font-black mono text-white">${val}</p>
+                            <p class="text-[9px] font-bold text-slate-500 mono">${((tShares/r.fd)*100).toFixed(2)}% Stake</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Balance Cards
+            const balCont = document.getElementById('balance-cards');
+            balCont.innerHTML = '';
+            rounds.filter(r => r.type === 'balance').forEach(r => {
+                const val = (tShares * r.p).toLocaleString('en-GB', { style: 'currency', currency: 'GBP', maximumFractionDigits: 0 });
+                balCont.innerHTML += `
+                    <div class="sov-card p-4 attrition-card flex justify-between items-center">
+                        <div>
+                            <p class="stat-label text-rose-500">${r.name}</p>
+                            <p class="text-[9px] font-bold text-slate-600 mt-1 uppercase">4% Interest Accrual</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm font-black mono text-white">${val}</p>
+                            <p class="text-[9px] font-bold text-rose-800 mono">${((tShares/r.fd)*100).toFixed(2)}% Diluted</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            chart.data.datasets[1].data = rounds.map(r => (tShares / r.fd)*100);
             chart.update();
         }
 
-        const ctx = document.getElementById('growthChart').getContext('2d');
+        function reset() {
+            document.getElementById('in-seed').value = 0;
+            document.getElementById('in-bank').value = 0;
+            refresh();
+        }
+
+        const ctx = document.getElementById('sovChart').getContext('2d');
         chart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: rounds.map(r => r.name),
                 datasets: [
                     {
-                        label: 'Prior Baseline',
-                        data: rounds.map(r => (priorShares / r.total) * 100),
-                        borderColor: 'rgba(255,255,255,0.1)',
-                        borderWidth: 2,
+                        data: rounds.map(r => (initialS / r.fd)*100),
+                        borderColor: '#222',
+                        borderWidth: 1.5,
                         borderDash: [5, 5],
                         pointRadius: 0,
                         fill: false
                     },
                     {
-                        label: 'Active Model',
                         data: [],
                         borderColor: '#3b82f6',
-                        borderWidth: 4,
+                        borderWidth: 3,
                         pointBackgroundColor: '#fff',
-                        pointRadius: 4,
-                        tension: 0.4,
-                        fill: { target: 'origin', above: 'rgba(59, 130, 246, 0.05)' }
+                        tension: 0.1,
+                        fill: false
                     }
                 ]
             },
@@ -151,17 +198,14 @@
                 maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
                 scales: {
-                    x: { grid: { display: false }, ticks: { color: '#444', font: { size: 9, weight: 'bold' } } },
-                    y: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#444', font: { size: 9, weight: 'bold' } } }
+                    x: { grid: { display: false }, ticks: { color: '#333', font: { size: 9, family: 'JetBrains Mono' } } },
+                    y: { grid: { color: 'rgba(255,255,255,0.02)' }, ticks: { color: '#333', font: { size: 9, family: 'JetBrains Mono' } } }
                 }
             }
         });
 
-        // Trigger updates on any input change
-        document.getElementById('cash-seed').addEventListener('input', refresh);
-        document.getElementById('cash-bank').addEventListener('input', refresh);
-        
-        // Initial Run
+        document.getElementById('in-seed').addEventListener('input', refresh);
+        document.getElementById('in-bank').addEventListener('input', refresh);
         refresh();
     </script>
 </body>
