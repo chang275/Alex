@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>iBuildpro | GS Sovereign Terminal</title>
+    <title>iBuildpro | Alpha Terminal v11</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;800&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
@@ -11,78 +11,103 @@
         :root { --gs-blue: #38bdf8; --gs-emerald: #10b981; --gs-red: #f43f5e; }
         body { background: #000; font-family: 'Inter', sans-serif; color: #f8fafc; }
         .gs-card { background: #080808; border: 1px solid #1a1a1a; border-radius: 4px; }
-        .accounting-input { background: #000; border: 1px solid #333; padding: 14px; width: 100%; color: var(--gs-blue); font-family: 'JetBrains Mono'; font-size: 20px; text-align: right; outline: none; }
-        .accounting-input:focus { border-color: var(--gs-blue); }
-        .label-gs { font-size: 9px; font-weight: 800; color: #444; text-transform: uppercase; letter-spacing: 0.2em; border-bottom: 1px solid #111; padding-bottom: 4px; margin-bottom: 10px; display: block; }
+        /* Accounting Format Input */
+        .accounting-input { background: #000; border: 1px solid #333; padding: 16px; width: 100%; color: var(--gs-blue); font-family: 'JetBrains Mono'; font-size: 22px; text-align: right; outline: none; border-radius: 4px; }
+        .accounting-input:focus { border-color: var(--gs-blue); background: #020617; }
+        .label-gs { font-size: 10px; font-weight: 800; color: #444; text-transform: uppercase; letter-spacing: 0.2em; border-bottom: 1px solid #111; padding-bottom: 4px; margin-bottom: 10px; display: block; }
         .mono { font-family: 'JetBrains Mono', monospace; }
-        .accretion { border-left: 3px solid var(--gs-blue); background: linear-gradient(90deg, rgba(56, 189, 248, 0.03) 0%, transparent 100%); }
-        .attrition { border-left: 3px solid var(--gs-red); background: linear-gradient(90deg, rgba(244, 63, 94, 0.03) 0%, transparent 100%); }
+        .incentive-box { background: linear-gradient(135deg, rgba(56, 189, 248, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%); border: 1px border-blue-900/30; }
+        .accretion { border-left: 4px solid var(--gs-blue); }
+        .attrition { border-left: 4px solid var(--gs-red); }
     </style>
 </head>
-<body class="p-4 md:p-8 max-w-2xl mx-auto pb-32">
+<body class="p-4 md:p-10 max-w-2xl mx-auto pb-32">
 
-    <header class="flex justify-between items-start mb-10 border-b border-white/5 pb-6">
+    <header class="flex justify-between items-start mb-10 border-b border-white/5 pb-8">
         <div>
-            <h1 class="text-xl font-black tracking-tighter text-white uppercase italic">Stockbridge <span class="text-slate-700 font-light italic">Capital</span></h1>
-            <p class="mono text-[9px] text-blue-500 font-bold uppercase tracking-widest mt-1">Terminal Node / Sovereign Alpha v10.0</p>
+            <h1 class="text-2xl font-black tracking-tighter text-white uppercase italic leading-none">Stockbridge <span class="text-slate-700 font-light italic">Capital</span></h1>
+            <p class="mono text-[10px] text-blue-500 font-bold uppercase tracking-widest mt-2">Incentive Modeler / Sovereign v11.0</p>
         </div>
         <div class="text-right">
-            <p class="mono text-[10px] text-slate-500 font-bold uppercase mb-1">Terminal Net Liquidity (B5)</p>
-            <p class="text-3xl font-black text-white tracking-tighter" id="top-val">£38.38M</p>
+            <p class="mono text-[11px] text-slate-500 font-bold uppercase mb-1">Total Payout (B5)</p>
+            <p class="text-4xl font-black text-white tracking-tighter neon-blue" id="top-val">£38.38M</p>
         </div>
     </header>
 
     <section class="grid grid-cols-2 gap-4 mb-8">
-        <div class="gs-card p-4 accretion">
-            <span class="label-gs">Adjusted Stake Value</span>
-            <p class="text-xl font-black mono text-white" id="stat-adj-val">£38.38M</p>
-            <p class="text-[9px] text-emerald-500 mono mt-1 font-bold" id="delta-val">+£0.00 GAIN</p>
+        <div class="gs-card p-5 accretion">
+            <span class="label-gs">Terminal Ownership</span>
+            <p class="text-2xl font-black mono text-white" id="stat-adj-own">2.93%</p>
+            <p class="text-[10px] text-slate-500 mono mt-2 font-bold" id="base-own">BASE: 2.93%</p>
         </div>
-        <div class="gs-card p-4">
-            <span class="label-gs">Adjusted Ownership</span>
-            <p class="text-xl font-black mono text-blue-400" id="stat-adj-own">2.93%</p>
-            <p class="text-[9px] text-slate-500 mono mt-1 font-bold" id="base-own">BASE: 2.93%</p>
+        <div class="gs-card p-5">
+            <span class="label-gs">Simulated ROI</span>
+            <p class="text-2xl font-black mono text-emerald-500" id="stat-roi">76.8x</p>
+            <p class="text-[10px] text-slate-500 mono mt-2 font-bold uppercase">Cash Basis Included</p>
         </div>
     </section>
 
-    <section class="gs-card p-6 mb-8">
-        <div class="flex justify-between items-center mb-6">
-            <span class="label-gs border-none p-0 m-0">Exposure Step-Function</span>
-            <div class="flex gap-4 text-[9px] font-bold uppercase mono text-slate-600">
-                <span>-- Base</span>
-                <span class="text-blue-500">● Adjusted</span>
+    <section class="gs-card p-8 mb-8">
+        <div class="flex justify-between items-center mb-8">
+            <span class="label-gs border-none p-0 m-0 text-slate-300">New Capital Injection</span>
+            <button onclick="resetModel()" class="mono text-[10px] font-bold text-slate-600 hover:text-white uppercase transition tracking-widest">Clear Strategy</button>
+        </div>
+        
+        <div class="space-y-10">
+            <div>
+                <label class="mono text-[11px] text-slate-500 block mb-3 uppercase font-bold">participation @ Seed (£11.68/sh)</label>
+                <div class="relative">
+                    <input type="text" id="cash-seed" class="accounting-input" placeholder="£0.00" oninput="formatCurrency(this)">
+                </div>
+            </div>
+
+            <div>
+                <label class="mono text-[11px] text-slate-500 block mb-3 uppercase font-bold">participation @ Bank (£58.40/sh)</label>
+                <div class="relative">
+                    <input type="text" id="cash-bank" class="accounting-input" placeholder="£0.00" oninput="formatCurrency(this)">
+                </div>
             </div>
         </div>
-        <div class="h-48">
+
+        <div class="mt-12 p-6 rounded-lg incentive-box border border-blue-900/30">
+            <h3 class="text-xs font-black uppercase tracking-widest text-blue-400 mb-4 flex justify-between">
+                <span>Marginal Conviction Alpha</span>
+                <span class="text-slate-500">vs Baseline</span>
+            </h3>
+            <div class="space-y-4">
+                <div class="flex justify-between items-end">
+                    <span class="text-[11px] font-bold text-slate-400 uppercase">Additional Shares Captured</span>
+                    <span class="mono text-lg font-bold text-white" id="res-new-shares">0</span>
+                </div>
+                <div class="flex justify-between items-end">
+                    <span class="text-[11px] font-bold text-slate-400 uppercase">Excess Value Created</span>
+                    <span class="mono text-lg font-bold text-emerald-400" id="res-delta-val">£0.00M</span>
+                </div>
+                <div class="flex justify-between items-end pt-2 border-t border-white/10">
+                    <span class="text-[11px] font-black text-blue-400 uppercase tracking-widest">Incentive Multiplier</span>
+                    <span class="mono text-xl font-black text-white" id="res-marginal-roi">0.0x</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="gs-card p-6 mb-10">
+        <span class="label-gs border-none p-0 m-0 mb-6">Dilution Step-Function (Baseline vs Active)</span>
+        <div class="h-56">
             <canvas id="gsChart"></canvas>
         </div>
     </section>
 
-    <section class="gs-card p-6 mb-8">
-        <div class="flex justify-between items-center mb-6">
-            <span class="label-gs border-none p-0 m-0">Incremental Capital Deployment</span>
-            <button onclick="resetModel()" class="mono text-[9px] font-bold text-slate-600 hover:text-white uppercase tracking-widest">Reset Model</button>
-        </div>
-        <div class="space-y-6">
-            <div>
-                <label class="mono text-[10px] text-slate-400 block mb-2 uppercase font-bold">participation @ Seed (£11.68)</label>
-                <input type="text" id="cash-seed" class="accounting-input" placeholder="£ 0.00" oninput="formatAndRun(this)">
-            </div>
-            <div>
-                <label class="mono text-[10px] text-slate-400 block mb-2 uppercase font-bold">participation @ Bank (£58.40)</label>
-                <input type="text" id="cash-bank" class="accounting-input" placeholder="£ 0.00" oninput="formatAndRun(this)">
-            </div>
-        </div>
-    </section>
-
-    <section class="space-y-4 mb-20">
-        <span class="label-gs">Valuation Matrix: Base vs Adjusted Position</span>
+    <section class="space-y-4 mb-24">
+        <span class="label-gs">Round-by-Round Valuation Adjusted</span>
         <div id="valuation-ledger" class="space-y-2"></div>
     </section>
 
     <script>
         const PRIOR_SHARES = 144092;
         const PRIOR_BASIS = 500000;
+        const PPS_SEED = 11.68;
+        const PPS_BANK = 58.40;
         const DATA = [
             { r: "PS Plus", pps: 3.47, fd: 2825331, type: 'accretion' },
             { r: "Seed", pps: 11.68, fd: 3424646, type: 'accretion' },
@@ -96,57 +121,63 @@
 
         let chart;
 
-        function formatAndRun(input) {
+        function formatCurrency(input) {
             let val = input.value.replace(/\D/g, "");
-            if (val === "") { input.value = ""; }
-            else {
+            if (val === "") {
+                input.value = "";
+            } else {
                 let n = parseInt(val) / 100;
-                input.value = n.toLocaleString('en-GB', { style: 'currency', currency: 'GBP' });
+                input.value = n.toLocaleString('en-GB', { 
+                    style: 'currency', 
+                    currency: 'GBP',
+                    minimumFractionDigits: 2 
+                });
             }
             refresh();
         }
 
         function parseVal(id) {
             let v = document.getElementById(id).value;
+            if (!v) return 0;
             return parseFloat(v.replace(/[^\d.]/g, "")) || 0;
         }
 
         function refresh() {
             const seedCash = parseVal('cash-seed');
             const bankCash = parseVal('cash-bank');
-            const nShares = Math.floor(seedCash / 11.68) + Math.floor(bankCash / 58.40);
-            const adjTotalShares = PRIOR_SHARES + nShares;
+            const newShares = Math.floor(seedCash / PPS_SEED) + Math.floor(bankCash / PPS_BANK);
+            const adjTotalShares = PRIOR_SHARES + newShares;
+            const totalBasis = PRIOR_BASIS + seedCash + bankCash;
 
             const b5 = DATA[7];
-            const baseFinalVal = PRIOR_SHARES * b5.pps;
-            const adjFinalVal = adjTotalShares * b5.pps;
-            const gainVal = adjFinalVal - baseFinalVal;
+            const baseVal = PRIOR_SHARES * b5.pps;
+            const adjVal = adjTotalShares * b5.pps;
+            const deltaVal = adjVal - baseVal;
 
-            // Update KPIs
-            document.getElementById('top-val').innerText = "£" + (adjFinalVal/1000000).toFixed(2) + "M";
-            document.getElementById('stat-adj-val').innerText = "£" + (adjFinalVal/1000000).toFixed(2) + "M";
-            document.getElementById('delta-val').innerText = "+£" + (gainVal/1000000).toFixed(2) + "M GAIN";
+            // Header & KPIs
+            document.getElementById('top-val').innerText = "£" + (adjVal/1000000).toFixed(2) + "M";
             document.getElementById('stat-adj-own').innerText = ((adjTotalShares / b5.fd)*100).toFixed(2) + "%";
-            document.getElementById('base-own').innerText = "BASE: " + ((PRIOR_SHARES / b5.fd)*100).toFixed(2) + "%";
+            document.getElementById('stat-roi').innerText = (adjVal / totalBasis).toFixed(1) + "x";
+            
+            // Incentive Box
+            document.getElementById('res-new-shares').innerText = newShares.toLocaleString();
+            document.getElementById('res-delta-val').innerText = "£" + (deltaVal/1000000).toFixed(2) + "M";
+            document.getElementById('res-marginal-roi').innerText = (seedCash + bankCash > 0) ? (deltaVal / (seedCash + bankCash)).toFixed(1) + "x" : "0.0x";
 
-            // Update Ledger
+            // Table Update
             const ledger = document.getElementById('valuation-ledger');
             ledger.innerHTML = '';
-
             DATA.forEach(d => {
-                const baseWorth = PRIOR_SHARES * d.pps;
                 const adjWorth = adjTotalShares * d.pps;
-                const roundGain = adjWorth - baseWorth;
-                
                 ledger.innerHTML += `
-                    <div class="gs-card p-4 ${d.type} flex justify-between items-center">
+                    <div class="gs-card p-4 ${d.type} flex justify-between items-center border-l-4">
                         <div>
                             <p class="mono text-[10px] font-black text-white uppercase">${d.r}</p>
-                            <p class="mono text-[9px] text-slate-500 mt-1 uppercase">BASE VALUE: £${(baseWorth/1000000).toFixed(2)}M</p>
+                            <p class="mono text-[9px] text-slate-500 mt-1 uppercase">PPS: £${d.pps.toFixed(2)}</p>
                         </div>
                         <div class="text-right">
                             <p class="mono text-sm font-bold text-white">£${(adjWorth/1000000).toFixed(2)}M</p>
-                            <p class="mono text-[9px] font-bold text-emerald-500 uppercase">+£${(roundGain/1000).toFixed(0)}k GAIN</p>
+                            <p class="mono text-[9px] font-bold text-blue-400 uppercase">STAKE: ${((adjTotalShares/d.fd)*100).toFixed(2)}%</p>
                         </div>
                     </div>
                 `;
@@ -168,22 +199,8 @@
             data: {
                 labels: DATA.map(d => d.r),
                 datasets: [
-                    {
-                        data: DATA.map(d => (PRIOR_SHARES / d.fd)*100),
-                        borderColor: '#222',
-                        borderWidth: 1.5,
-                        borderDash: [4, 4],
-                        pointRadius: 0,
-                        fill: false
-                    },
-                    {
-                        data: [],
-                        borderColor: '#38bdf8',
-                        borderWidth: 3,
-                        pointBackgroundColor: '#fff',
-                        tension: 0.1,
-                        fill: false
-                    }
+                    { data: DATA.map(d => (PRIOR_SHARES/d.fd)*100), borderColor: '#222', borderWidth: 1.5, borderDash: [4, 4], pointRadius: 0, fill: false },
+                    { data: [], borderColor: '#38bdf8', borderWidth: 3, pointBackgroundColor: '#fff', tension: 0.1, fill: false }
                 ]
             },
             options: {
@@ -192,7 +209,7 @@
                 plugins: { legend: { display: false } },
                 scales: {
                     x: { grid: { display: false }, ticks: { color: '#444', font: { size: 9, family: 'JetBrains Mono' } } },
-                    y: { grid: { color: '#0a0a0a' }, ticks: { color: '#444', font: { size: 9, family: 'JetBrains Mono' } } }
+                    y: { grid: { color: '#111' }, ticks: { color: '#444', font: { size: 9, family: 'JetBrains Mono' } } }
                 }
             }
         });
