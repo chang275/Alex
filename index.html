@@ -2,183 +2,138 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iBuildpro | Investor Intel v3</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Stockbridge | Capital Modeler</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <style>
-        body { background: radial-gradient(circle at top right, #0f172a, #020617); font-family: 'Plus Jakarta Sans', sans-serif; color: #f8fafc; }
-        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; }
-        .neon-blue { color: #38bdf8; text-shadow: 0 0 10px rgba(56, 189, 248, 0.4); }
-        .neon-green { color: #4ade80; text-shadow: 0 0 10px rgba(74, 222, 128, 0.4); }
-        input[type=range] { -webkit-appearance: none; background: rgba(255, 255, 255, 0.05); border-radius: 10px; height: 8px; cursor: pointer; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%; background: #38bdf8; border: 2px solid #fff; box-shadow: 0 0 10px #38bdf8; }
-        .mono { font-family: 'JetBrains Mono', monospace; }
-        .table-balance { background: rgba(244, 63, 94, 0.03); border-left: 2px solid #f43f5e; }
-        .table-bank { background: rgba(56, 189, 248, 0.03); border-left: 2px solid #38bdf8; }
+        body { background: #050505; font-family: 'Plus Jakarta Sans', sans-serif; color: #fff; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 28px; }
+        .input-pill { background: #111; border: 1px solid #333; border-radius: 16px; padding: 14px; width: 100%; color: #fff; font-family: 'JetBrains Mono'; outline: none; transition: all 0.3s; }
+        .input-pill:focus { border-color: #3b82f6; box-shadow: 0 0 20px rgba(59, 130, 246, 0.2); }
+        .neon-blue { color: #3b82f6; text-shadow: 0 0 15px rgba(59, 130, 246, 0.5); }
+        .neon-green { color: #10b981; text-shadow: 0 0 15px rgba(16, 185, 129, 0.5); }
+        .label { font-size: 10px; font-weight: 800; color: #555; text-transform: uppercase; letter-spacing: 1.5px; }
     </style>
 </head>
-<body class="min-h-screen p-6 md:p-12">
+<body class="pb-20">
 
-    <header class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start mb-12 gap-8">
+    <nav class="p-6 sticky top-0 bg-black/60 backdrop-blur-lg z-20 flex justify-between items-center border-b border-white/5">
         <div>
-            <h1 class="text-4xl font-black tracking-tighter uppercase italic bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-500">iBuildpro <span class="neon-blue">Analytics</span></h1>
-            <p class="text-slate-500 text-[10px] tracking-[0.4em] font-bold mt-2">DILUTION MODELER • STOCKBRIDGE CAPITAL NODE</p>
+            <h1 class="text-xl font-black tracking-tighter italic">STOCKBRIDGE <span class="text-blue-500 font-normal">CAPITAL</span></h1>
+            <p class="label">iBuildpro Holdings Portoflio</p>
         </div>
-        <div class="flex gap-4">
-             <div class="glass px-6 py-4 border-emerald-500/20">
-                <p class="text-[9px] text-slate-500 font-bold uppercase mb-1">Final Val (B5)</p>
-                <p class="text-xl font-black neon-green mono" id="header-val">£38.3M</p>
-            </div>
-            <div class="glass px-6 py-4 border-rose-500/20 text-center">
-                <p class="text-[9px] text-slate-500 font-bold uppercase mb-1">Ownership</p>
-                <p class="text-xl font-black text-white mono" id="header-own">2.93%</p>
-            </div>
-        </div>
-    </header>
+        <div class="h-2 w-2 rounded-full bg-blue-500 animate-pulse"></div>
+    </nav>
 
-    <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <main class="p-4 max-w-lg mx-auto space-y-6">
         
-        <div class="lg:col-span-4 space-y-6">
-            <div class="glass p-8 border-t-2 border-blue-500">
-                <h2 class="text-lg font-bold mb-6 flex items-center gap-2">
-                    <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-                    Strategic Deployment
-                </h2>
-                
-                <div class="space-y-10">
-                    <div>
-                        <div class="flex justify-between mb-3">
-                            <label class="text-[10px] font-black uppercase text-slate-400">参加 Seed Round</label>
-                            <span class="mono text-xs text-blue-400 font-bold" id="seed-label">£0</span>
-                        </div>
-                        <input type="range" id="seed-invest" min="0" max="5000000" step="100000" value="0" class="w-full">
-                    </div>
-
-                    <div>
-                        <div class="flex justify-between mb-3">
-                            <label class="text-[10px] font-black uppercase text-slate-400">参加 Bank Round</label>
-                            <span class="mono text-xs text-blue-400 font-bold" id="bank-label">£0</span>
-                        </div>
-                        <input type="range" id="bank-invest" min="0" max="15000000" step="500000" value="0" class="w-full">
-                    </div>
+        <div class="glass p-8 bg-gradient-to-br from-blue-600/10 to-transparent relative overflow-hidden">
+            <div class="absolute -right-10 -top-10 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl"></div>
+            <p class="label mb-2">Projected Stake Value (B5)</p>
+            <div class="text-5xl font-extrabold tracking-tighter neon-blue mb-6" id="final-val">£38.4M</div>
+            
+            <div class="grid grid-cols-2 gap-6 pt-6 border-t border-white/10">
+                <div>
+                    <p class="label">Ownership %</p>
+                    <p class="text-xl font-bold" id="final-own">2.93%</p>
                 </div>
-
-                <div class="mt-10 pt-6 border-t border-white/5 space-y-4">
-                    <div class="flex justify-between items-center text-xs">
-                        <span class="text-slate-500 font-bold uppercase">Incremental Shares</span>
-                        <span class="mono font-bold text-white" id="stat-new-shares">0</span>
-                    </div>
-                    <div class="flex justify-between items-center text-xs">
-                        <span class="text-slate-500 font-bold uppercase">Total Capital Basis</span>
-                        <span class="mono font-bold text-emerald-400" id="stat-total-basis">£500k</span>
-                    </div>
+                <div>
+                    <p class="label">Total FD Shares</p>
+                    <p class="text-xl font-bold font-mono" id="final-shares">144,092</p>
                 </div>
-            </div>
-
-            <div class="glass p-6 bg-blue-500/5">
-                <p class="text-[10px] font-bold text-slate-500 uppercase mb-2 italic">Baseline Note</p>
-                <p class="text-xs text-slate-400 leading-relaxed">
-                    If Stockbridge Capital <span class="text-white font-bold">does nothing</span>, their initial 144,092 shares dilute to 2.93%. Slide above to buy back ownership.
-                </p>
             </div>
         </div>
 
-        <div class="lg:col-span-8 space-y-8">
-            <div class="glass p-8">
-                <div class="flex justify-between items-center mb-8">
-                    <h3 class="text-xs font-black uppercase tracking-[0.3em] text-slate-500">Equity Growth: Baseline vs Simulated</h3>
-                    <div class="flex gap-4">
-                        <span class="flex items-center gap-1.5 text-[9px] font-bold uppercase text-slate-400">
-                            <span class="h-2 w-2 rounded-full border border-slate-500"></span> Baseline (Do Nothing)
-                        </span>
-                        <span class="flex items-center gap-1.5 text-[9px] font-bold uppercase text-blue-400">
-                            <span class="h-2 w-2 rounded-full bg-blue-500"></span> Simulated
-                        </span>
-                    </div>
+        <div class="glass p-6">
+            <div class="flex justify-between items-center mb-6">
+                <p class="label">Growth vs Baseline</p>
+                <div class="flex gap-3">
+                    <span class="flex items-center gap-1 text-[8px] font-bold text-slate-500 uppercase"><span class="h-1.5 w-1.5 rounded-full border border-slate-500"></span> Prior</span>
+                    <span class="flex items-center gap-1 text-[8px] font-bold text-blue-400 uppercase"><span class="h-1.5 w-1.5 rounded-full bg-blue-500"></span> Active</span>
                 </div>
-                <div class="relative h-[300px]">
-                    <canvas id="growthChart"></canvas>
+            </div>
+            <div class="h-56">
+                <canvas id="growthChart"></canvas>
+            </div>
+        </div>
+
+        <div class="glass p-8 space-y-8">
+            <h2 class="text-xs font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
+                <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                Deploy New Capital
+            </h2>
+            
+            <div class="space-y-6">
+                <div class="relative">
+                    <label class="label block mb-2">Invest in Seed Round (£11.68)</label>
+                    <input type="number" id="cash-seed" value="0" class="input-pill" placeholder="Enter £ Amount">
+                </div>
+                <div class="relative">
+                    <label class="label block mb-2">Invest in Bank Round (£58.40)</label>
+                    <input type="number" id="cash-bank" value="0" class="input-pill" placeholder="Enter £ Amount">
                 </div>
             </div>
 
-            <div class="glass overflow-hidden border border-rose-500/10">
-                <div class="px-8 py-5 border-b border-white/5 bg-rose-500/5 flex justify-between items-center">
-                    <h3 class="text-[10px] font-black uppercase tracking-widest text-rose-300">Balance Rounds Ledger (Interest Foregone)</h3>
-                    <span class="mono text-[10px] text-rose-500/50">CONVERSION PHASE 1-5</span>
+            <div class="p-5 bg-white/5 rounded-2xl border border-white/5 space-y-4">
+                <div class="flex justify-between items-end">
+                    <span class="label text-slate-500">New Shares Purchased</span>
+                    <span class="font-mono text-sm font-bold text-white" id="new-shares-count">0</span>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-[11px] uppercase tracking-tighter mono">
-                        <thead>
-                            <tr class="text-slate-500 border-b border-white/5 bg-black/40">
-                                <th class="p-4">Tranche</th>
-                                <th class="p-4">Round Price</th>
-                                <th class="p-4">Interest Cap</th>
-                                <th class="p-4 text-right">Final Ownership</th>
-                            </tr>
-                        </thead>
-                        <tbody id="balance-body" class="divide-y divide-white/5">
-                            </tbody>
-                    </table>
+                <div class="flex justify-between items-end">
+                    <span class="label text-slate-500">Incremental Investment</span>
+                    <span class="font-mono text-sm font-bold text-blue-400" id="new-investment-total">£0</span>
+                </div>
+                <div class="flex justify-between items-end pt-2 border-t border-white/5">
+                    <span class="label text-slate-500">Total Shares (Aggregated)</span>
+                    <span class="font-mono text-sm font-bold text-emerald-400" id="aggregated-shares">144,092</span>
                 </div>
             </div>
+        </div>
+
+        <div class="p-6 text-center">
+            <p class="text-[9px] font-bold text-slate-600 uppercase tracking-widest leading-relaxed">
+                Prior position of 144,092 shares is treated as fixed cost basis.<br>Modeling calculates dilution impact of Balance 1-5 interest foregone.
+            </p>
         </div>
     </main>
 
     <script>
-        const stockBaseline = 144092;
+        const priorShares = 144092;
         const rounds = [
-            { name: "PS Plus", pps: 3.47, total: 2825331, type: 'core' },
-            { name: "Seed Round", pps: 11.68, total: 3424646, type: 'core' },
-            { name: "Bank Ser A", pps: 58.40, total: 4452046, type: 'bank' },
-            { name: "Balance 1", pps: 58.40, total: 4657571, type: 'balance', note: '4% FOREGONE' },
-            { name: "Balance 2", pps: 96.64, total: 4761071, type: 'balance', note: '4% FOREGONE' },
-            { name: "Balance 3", pps: 142.77, total: 4831121, type: 'balance', note: '4% FOREGONE' },
-            { name: "Balance 4", pps: 201.79, total: 4880661, type: 'balance', note: '4% FOREGONE' },
-            { name: "Balance 5", pps: 266.39, total: 4918211, type: 'balance', note: '4% FOREGONE' }
+            { name: "PS+", pps: 3.47, total: 2825331 },
+            { name: "Seed", pps: 11.68, total: 3424646 },
+            { name: "Bank", pps: 58.40, total: 4452046 },
+            { name: "B1", pps: 58.40, total: 4657571 },
+            { name: "B2", pps: 96.64, total: 4761071 },
+            { name: "B3", pps: 142.77, total: 4831121 },
+            { name: "B4", pps: 201.79, total: 4880661 },
+            { name: "B5", pps: 266.39, total: 4918211 }
         ];
 
         let chart;
 
-        function update() {
-            const seedCash = parseFloat(document.getElementById('seed-invest').value);
-            const bankCash = parseFloat(document.getElementById('bank-invest').value);
+        function refresh() {
+            const seedCash = parseFloat(document.getElementById('cash-seed').value) || 0;
+            const bankCash = parseFloat(document.getElementById('cash-bank').value) || 0;
+
+            const newSeedShares = Math.floor(seedCash / 11.68);
+            const newBankShares = Math.floor(bankCash / 58.40);
+            const activeTotalShares = priorShares + newSeedShares + newBankShares;
+
+            // Update Text
+            document.getElementById('new-shares-count').innerText = (newSeedShares + newBankShares).toLocaleString();
+            document.getElementById('new-investment-total').innerText = "£" + (seedCash + bankCash).toLocaleString();
+            document.getElementById('aggregated-shares').innerText = activeTotalShares.toLocaleString();
             
-            // UI Labels
-            document.getElementById('seed-label').innerText = "£" + (seedCash/1000000).toFixed(1) + "M";
-            document.getElementById('bank-label').innerText = "£" + (bankCash/1000000).toFixed(1) + "M";
-
-            // Share Math
-            const seedShares = Math.floor(seedCash / 11.68);
-            const bankShares = Math.floor(bankCash / 58.40);
-            const simTotal = stockBaseline + seedShares + bankShares;
-
-            document.getElementById('stat-new-shares').innerText = (seedShares + bankShares).toLocaleString();
-            document.getElementById('stat-total-basis').innerText = "£" + ((500000 + seedCash + bankCash)/1000000).toFixed(1) + "M";
-
-            // Final Stats (B5)
             const b5 = rounds[7];
-            document.getElementById('header-val').innerText = "£" + ((simTotal * b5.pps)/1000000).toFixed(1) + "M";
-            document.getElementById('header-own').innerText = ((simTotal / b5.total) * 100).toFixed(2) + "%";
+            document.getElementById('final-val').innerText = "£" + ((activeTotalShares * b5.pps) / 1000000).toFixed(1) + "M";
+            document.getElementById('final-own').innerText = ((activeTotalShares / b5.total) * 100).toFixed(2) + "%";
+            document.getElementById('final-shares').innerText = activeTotalShares.toLocaleString();
 
-            // Populate Table (Balance Rounds Only)
-            const bBody = document.getElementById('balance-body');
-            bBody.innerHTML = '';
-            rounds.filter(r => r.type === 'balance').forEach(r => {
-                bBody.innerHTML += `
-                    <tr class="table-balance hover:bg-white/5 transition-all">
-                        <td class="p-4 font-black text-rose-300">${r.name}</td>
-                        <td class="p-4 text-slate-300">£${r.pps.toFixed(2)}</td>
-                        <td class="p-4 text-slate-500">${r.note}</td>
-                        <td class="p-4 text-right font-bold text-white">${((simTotal/r.total)*100).toFixed(2)}%</td>
-                    </tr>
-                `;
-            });
-
-            // Update Chart (Baseline vs Sim)
-            chart.data.datasets[0].data = rounds.map(r => (stockBaseline / r.total) * 100);
-            chart.data.datasets[1].data = rounds.map(r => (simTotal / r.total) * 100);
+            // Update Graph
+            chart.data.datasets[1].data = rounds.map(r => (activeTotalShares / r.total) * 100);
             chart.update();
         }
 
@@ -189,22 +144,24 @@
                 labels: rounds.map(r => r.name),
                 datasets: [
                     {
-                        label: 'Baseline (Do Nothing)',
-                        borderColor: '#475569',
+                        label: 'Prior Position',
+                        data: rounds.map(r => (priorShares / r.total) * 100),
+                        borderColor: 'rgba(255,255,255,0.1)',
                         borderWidth: 2,
                         borderDash: [5, 5],
                         pointRadius: 0,
-                        fill: false,
-                        tension: 0.3
+                        fill: false
                     },
                     {
-                        label: 'Simulated Participation',
-                        borderColor: '#38bdf8',
+                        label: 'Active Model',
+                        data: [],
+                        borderColor: '#3b82f6',
                         borderWidth: 4,
                         pointBackgroundColor: '#fff',
-                        pointRadius: 4,
-                        fill: { target: 'origin', above: 'rgba(56, 189, 248, 0.05)' },
-                        tension: 0.3
+                        pointBorderColor: '#3b82f6',
+                        pointRadius: 3,
+                        tension: 0.4,
+                        fill: { target: 'origin', above: 'rgba(59, 130, 246, 0.05)' }
                     }
                 ]
             },
@@ -213,15 +170,15 @@
                 maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
                 scales: {
-                    y: { grid: { color: 'rgba(255,255,255,0.02)' }, ticks: { color: '#64748b' }, title: { display: true, text: 'OWNERSHIP %', color: '#475569', font: { size: 9, weight: 'bold' } } },
-                    x: { grid: { display: false }, ticks: { color: '#64748b', font: { size: 9 } } }
+                    x: { grid: { display: false }, ticks: { color: '#444', font: { size: 9, weight: 'bold' } } },
+                    y: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#444', font: { size: 9, weight: 'bold' } } }
                 }
             }
         });
 
-        document.getElementById('seed-invest').addEventListener('input', update);
-        document.getElementById('bank-invest').addEventListener('input', update);
-        update();
+        document.getElementById('cash-seed').addEventListener('input', refresh);
+        document.getElementById('cash-bank').addEventListener('input', refresh);
+        refresh();
     </script>
 </body>
 </html>
