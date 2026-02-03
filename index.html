@@ -3,189 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Stockbridge | Sovereign Tier Terminal</title>
+    <title>iBuildpro | GS Sovereign Terminal</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;800&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
-        body { background: #000; font-family: 'Inter', sans-serif; color: #fff; -webkit-tap-highlight-color: transparent; }
-        .sov-card { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 4px; border-left: 2px solid #333; }
-        .input-box { background: #111; border: 1px solid #222; border-radius: 4px; padding: 12px; width: 100%; color: #3b82f6; font-family: 'JetBrains Mono'; font-size: 18px; outline: none; }
-        .input-box:focus { border-color: #3b82f6; }
-        .stat-label { font-size: 9px; font-weight: 800; color: #555; text-transform: uppercase; letter-spacing: 0.15em; }
+        :root { --gs-blue: #38bdf8; --gs-emerald: #10b981; --gs-red: #f43f5e; }
+        body { background: #000; font-family: 'Inter', sans-serif; color: #f8fafc; }
+        .gs-card { background: #080808; border: 1px solid #1a1a1a; border-radius: 4px; }
+        .accounting-input { background: #000; border: 1px solid #333; padding: 14px; width: 100%; color: var(--gs-blue); font-family: 'JetBrains Mono'; font-size: 20px; text-align: right; outline: none; }
+        .accounting-input:focus { border-color: var(--gs-blue); }
+        .label-gs { font-size: 9px; font-weight: 800; color: #444; text-transform: uppercase; letter-spacing: 0.2em; border-bottom: 1px solid #111; padding-bottom: 4px; margin-bottom: 10px; display: block; }
         .mono { font-family: 'JetBrains Mono', monospace; }
-        .delta-positive { color: #10b981; }
-        .attrition-card { border-left-color: #ef4444; background: linear-gradient(90deg, rgba(239, 68, 68, 0.05) 0%, transparent 100%); }
-        .equity-card { border-left-color: #3b82f6; background: linear-gradient(90deg, rgba(59, 130, 246, 0.05) 0%, transparent 100%); }
+        .accretion { border-left: 3px solid var(--gs-blue); background: linear-gradient(90deg, rgba(56, 189, 248, 0.03) 0%, transparent 100%); }
+        .attrition { border-left: 3px solid var(--gs-red); background: linear-gradient(90deg, rgba(244, 63, 94, 0.03) 0%, transparent 100%); }
     </style>
 </head>
-<body class="p-4 pb-20 max-w-lg mx-auto">
+<body class="p-4 md:p-8 max-w-2xl mx-auto pb-32">
 
-    <header class="flex justify-between items-start mb-8 border-b border-white/10 pb-6">
+    <header class="flex justify-between items-start mb-10 border-b border-white/5 pb-6">
         <div>
-            <h1 class="text-xl font-black tracking-tighter uppercase italic">Stockbridge <span class="text-blue-500 font-normal">Sovereign</span></h1>
-            <p class="stat-label">Portfolio: iBuildpro Holdings</p>
+            <h1 class="text-xl font-black tracking-tighter text-white uppercase italic">Stockbridge <span class="text-slate-700 font-light italic">Capital</span></h1>
+            <p class="mono text-[9px] text-blue-500 font-bold uppercase tracking-widest mt-1">Terminal Node / Sovereign Alpha v10.0</p>
         </div>
         <div class="text-right">
-            <p class="stat-label">Total Payout (B5)</p>
-            <p class="text-3xl font-black mono text-white tracking-tighter" id="top-val">£38.4M</p>
+            <p class="mono text-[10px] text-slate-500 font-bold uppercase mb-1">Terminal Net Liquidity (B5)</p>
+            <p class="text-3xl font-black text-white tracking-tighter" id="top-val">£38.38M</p>
         </div>
     </header>
 
-    <div class="grid grid-cols-2 gap-3 mb-6">
-        <div class="sov-card p-4 equity-card">
-            <p class="stat-label">Baseline Shares</p>
-            <p class="text-lg font-black mono">144,092</p>
+    <section class="grid grid-cols-2 gap-4 mb-8">
+        <div class="gs-card p-4 accretion">
+            <span class="label-gs">Adjusted Stake Value</span>
+            <p class="text-xl font-black mono text-white" id="stat-adj-val">£38.38M</p>
+            <p class="text-[9px] text-emerald-500 mono mt-1 font-bold" id="delta-val">+£0.00 GAIN</p>
         </div>
-        <div class="sov-card p-4">
-            <p class="stat-label">Net ROI</p>
-            <p class="text-lg font-black mono text-emerald-500" id="roi-stat">76.8x</p>
+        <div class="gs-card p-4">
+            <span class="label-gs">Adjusted Ownership</span>
+            <p class="text-xl font-black mono text-blue-400" id="stat-adj-own">2.93%</p>
+            <p class="text-[9px] text-slate-500 mono mt-1 font-bold" id="base-own">BASE: 2.93%</p>
         </div>
-    </div>
+    </section>
 
-    <section class="sov-card p-5 mb-8">
+    <section class="gs-card p-6 mb-8">
         <div class="flex justify-between items-center mb-6">
-            <span class="stat-label">Holding Attrition vs Growth</span>
-            <div class="flex gap-4">
-                <span class="text-[8px] font-bold text-slate-600 uppercase">-- Baseline</span>
-                <span class="text-[8px] font-bold text-blue-500 uppercase">● Simulated</span>
+            <span class="label-gs border-none p-0 m-0">Exposure Step-Function</span>
+            <div class="flex gap-4 text-[9px] font-bold uppercase mono text-slate-600">
+                <span>-- Base</span>
+                <span class="text-blue-500">● Adjusted</span>
             </div>
         </div>
         <div class="h-48">
-            <canvas id="sovChart"></canvas>
+            <canvas id="gsChart"></canvas>
         </div>
     </section>
 
-    <section class="space-y-4 mb-8">
-        <div class="flex justify-between items-center px-1">
-            <h3 class="stat-label">Deployment Modeling</h3>
-            <button onclick="reset()" class="text-[10px] font-black text-slate-600 uppercase">Reset</button>
+    <section class="gs-card p-6 mb-8">
+        <div class="flex justify-between items-center mb-6">
+            <span class="label-gs border-none p-0 m-0">Incremental Capital Deployment</span>
+            <button onclick="resetModel()" class="mono text-[9px] font-bold text-slate-600 hover:text-white uppercase tracking-widest">Reset Model</button>
         </div>
-        <div class="sov-card p-5 space-y-6">
+        <div class="space-y-6">
             <div>
-                <label class="stat-label block mb-2">Seed Allocation (PPS £11.68)</label>
-                <div class="relative">
-                    <span class="absolute left-3 top-3 text-slate-600 font-mono">£</span>
-                    <input type="number" id="in-seed" value="0" class="input-box pl-8" placeholder="0">
-                </div>
+                <label class="mono text-[10px] text-slate-400 block mb-2 uppercase font-bold">participation @ Seed (£11.68)</label>
+                <input type="text" id="cash-seed" class="accounting-input" placeholder="£ 0.00" oninput="formatAndRun(this)">
             </div>
             <div>
-                <label class="stat-label block mb-2">Bank Allocation (PPS £58.40)</label>
-                <div class="relative">
-                    <span class="absolute left-3 top-3 text-slate-600 font-mono">£</span>
-                    <input type="number" id="in-bank" value="0" class="input-box pl-8" placeholder="0">
-                </div>
+                <label class="mono text-[10px] text-slate-400 block mb-2 uppercase font-bold">participation @ Bank (£58.40)</label>
+                <input type="text" id="cash-bank" class="accounting-input" placeholder="£ 0.00" oninput="formatAndRun(this)">
             </div>
         </div>
     </section>
 
-    <section class="space-y-3 mb-10">
-        <p class="stat-label px-1 mb-2">Per-Round Position Worth</p>
-        <div id="round-cards" class="space-y-3">
-            </div>
-    </section>
-
-    <section class="space-y-3 mb-12">
-        <p class="stat-label px-1 mb-2 text-rose-500">Balance Reduction Ledger (Tranches 1-5)</p>
-        <div id="balance-cards" class="space-y-2">
-            </div>
+    <section class="space-y-4 mb-20">
+        <span class="label-gs">Valuation Matrix: Base vs Adjusted Position</span>
+        <div id="valuation-ledger" class="space-y-2"></div>
     </section>
 
     <script>
-        const initialS = 144092;
-        const initialB = 500000;
-        const rounds = [
-            { name: "Pre-Seed Plus", p: 3.47, fd: 2825331, type: 'equity' },
-            { name: "Seed Round", p: 11.68, fd: 3424646, type: 'equity' },
-            { name: "Bank Series A", p: 58.40, fd: 4452046, type: 'equity' },
-            { name: "Balance Round 1", p: 58.40, fd: 4657571, type: 'balance' },
-            { name: "Balance Round 2", p: 96.64, fd: 4761071, type: 'balance' },
-            { name: "Balance Round 3", p: 142.77, fd: 4831121, type: 'balance' },
-            { name: "Balance Round 4", p: 201.79, fd: 4880661, type: 'balance' },
-            { name: "Balance Round 5", p: 266.39, fd: 4918211, type: 'balance' }
+        const PRIOR_SHARES = 144092;
+        const PRIOR_BASIS = 500000;
+        const DATA = [
+            { r: "PS Plus", pps: 3.47, fd: 2825331, type: 'accretion' },
+            { r: "Seed", pps: 11.68, fd: 3424646, type: 'accretion' },
+            { r: "Bank Round", pps: 58.40, fd: 4452046, type: 'accretion' },
+            { r: "Balance 1", pps: 58.40, fd: 4657571, type: 'attrition' },
+            { r: "Balance 2", pps: 96.64, fd: 4761071, type: 'attrition' },
+            { r: "Balance 3", pps: 142.77, fd: 4831121, type: 'attrition' },
+            { r: "Balance 4", pps: 201.79, fd: 4880661, type: 'attrition' },
+            { r: "Balance 5", pps: 266.39, fd: 4918211, type: 'attrition' }
         ];
 
         let chart;
 
-        function refresh() {
-            const sCash = parseFloat(document.getElementById('in-seed').value) || 0;
-            const bCash = parseFloat(document.getElementById('in-bank').value) || 0;
-            const nS = Math.floor(sCash / 11.68);
-            const nB = Math.floor(bCash / 58.40);
-            const tShares = initialS + nS + nB;
-            const tBasis = initialB + sCash + bCash;
-
-            // Global KPI
-            const b5 = rounds[7];
-            const finalVal = tShares * b5.p;
-            document.getElementById('top-val').innerText = "£" + (finalVal/1000000).toFixed(1) + "M";
-            document.getElementById('roi-stat').innerText = (finalVal / tBasis).toFixed(1) + "x";
-
-            // Equity Cards (PS, Seed, Bank)
-            const roundCont = document.getElementById('round-cards');
-            roundCont.innerHTML = '';
-            rounds.filter(r => r.type === 'equity').forEach(r => {
-                const val = (tShares * r.p).toLocaleString('en-GB', { style: 'currency', currency: 'GBP', maximumFractionDigits: 0 });
-                roundCont.innerHTML += `
-                    <div class="sov-card p-4 equity-card flex justify-between items-center">
-                        <div>
-                            <p class="stat-label text-blue-400">${r.name}</p>
-                            <p class="text-xs font-bold mono mt-1">PPS £${r.p.toFixed(2)}</p>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-sm font-black mono text-white">${val}</p>
-                            <p class="text-[9px] font-bold text-slate-500 mono">${((tShares/r.fd)*100).toFixed(2)}% Stake</p>
-                        </div>
-                    </div>
-                `;
-            });
-
-            // Balance Cards
-            const balCont = document.getElementById('balance-cards');
-            balCont.innerHTML = '';
-            rounds.filter(r => r.type === 'balance').forEach(r => {
-                const val = (tShares * r.p).toLocaleString('en-GB', { style: 'currency', currency: 'GBP', maximumFractionDigits: 0 });
-                balCont.innerHTML += `
-                    <div class="sov-card p-4 attrition-card flex justify-between items-center">
-                        <div>
-                            <p class="stat-label text-rose-500">${r.name}</p>
-                            <p class="text-[9px] font-bold text-slate-600 mt-1 uppercase">4% Interest Accrual</p>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-sm font-black mono text-white">${val}</p>
-                            <p class="text-[9px] font-bold text-rose-800 mono">${((tShares/r.fd)*100).toFixed(2)}% Diluted</p>
-                        </div>
-                    </div>
-                `;
-            });
-
-            chart.data.datasets[1].data = rounds.map(r => (tShares / r.fd)*100);
-            chart.update();
-        }
-
-        function reset() {
-            document.getElementById('in-seed').value = 0;
-            document.getElementById('in-bank').value = 0;
+        function formatAndRun(input) {
+            let val = input.value.replace(/\D/g, "");
+            if (val === "") { input.value = ""; }
+            else {
+                let n = parseInt(val) / 100;
+                input.value = n.toLocaleString('en-GB', { style: 'currency', currency: 'GBP' });
+            }
             refresh();
         }
 
-        const ctx = document.getElementById('sovChart').getContext('2d');
+        function parseVal(id) {
+            let v = document.getElementById(id).value;
+            return parseFloat(v.replace(/[^\d.]/g, "")) || 0;
+        }
+
+        function refresh() {
+            const seedCash = parseVal('cash-seed');
+            const bankCash = parseVal('cash-bank');
+            const nShares = Math.floor(seedCash / 11.68) + Math.floor(bankCash / 58.40);
+            const adjTotalShares = PRIOR_SHARES + nShares;
+
+            const b5 = DATA[7];
+            const baseFinalVal = PRIOR_SHARES * b5.pps;
+            const adjFinalVal = adjTotalShares * b5.pps;
+            const gainVal = adjFinalVal - baseFinalVal;
+
+            // Update KPIs
+            document.getElementById('top-val').innerText = "£" + (adjFinalVal/1000000).toFixed(2) + "M";
+            document.getElementById('stat-adj-val').innerText = "£" + (adjFinalVal/1000000).toFixed(2) + "M";
+            document.getElementById('delta-val').innerText = "+£" + (gainVal/1000000).toFixed(2) + "M GAIN";
+            document.getElementById('stat-adj-own').innerText = ((adjTotalShares / b5.fd)*100).toFixed(2) + "%";
+            document.getElementById('base-own').innerText = "BASE: " + ((PRIOR_SHARES / b5.fd)*100).toFixed(2) + "%";
+
+            // Update Ledger
+            const ledger = document.getElementById('valuation-ledger');
+            ledger.innerHTML = '';
+
+            DATA.forEach(d => {
+                const baseWorth = PRIOR_SHARES * d.pps;
+                const adjWorth = adjTotalShares * d.pps;
+                const roundGain = adjWorth - baseWorth;
+                
+                ledger.innerHTML += `
+                    <div class="gs-card p-4 ${d.type} flex justify-between items-center">
+                        <div>
+                            <p class="mono text-[10px] font-black text-white uppercase">${d.r}</p>
+                            <p class="mono text-[9px] text-slate-500 mt-1 uppercase">BASE VALUE: £${(baseWorth/1000000).toFixed(2)}M</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="mono text-sm font-bold text-white">£${(adjWorth/1000000).toFixed(2)}M</p>
+                            <p class="mono text-[9px] font-bold text-emerald-500 uppercase">+£${(roundGain/1000).toFixed(0)}k GAIN</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            chart.data.datasets[1].data = DATA.map(d => (adjTotalShares / d.fd)*100);
+            chart.update();
+        }
+
+        function resetModel() {
+            document.getElementById('cash-seed').value = "";
+            document.getElementById('cash-bank').value = "";
+            refresh();
+        }
+
+        const ctx = document.getElementById('gsChart').getContext('2d');
         chart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: rounds.map(r => r.name),
+                labels: DATA.map(d => d.r),
                 datasets: [
                     {
-                        data: rounds.map(r => (initialS / r.fd)*100),
+                        data: DATA.map(d => (PRIOR_SHARES / d.fd)*100),
                         borderColor: '#222',
                         borderWidth: 1.5,
-                        borderDash: [5, 5],
+                        borderDash: [4, 4],
                         pointRadius: 0,
                         fill: false
                     },
                     {
                         data: [],
-                        borderColor: '#3b82f6',
+                        borderColor: '#38bdf8',
                         borderWidth: 3,
                         pointBackgroundColor: '#fff',
                         tension: 0.1,
@@ -198,14 +191,12 @@
                 maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
                 scales: {
-                    x: { grid: { display: false }, ticks: { color: '#333', font: { size: 9, family: 'JetBrains Mono' } } },
-                    y: { grid: { color: 'rgba(255,255,255,0.02)' }, ticks: { color: '#333', font: { size: 9, family: 'JetBrains Mono' } } }
+                    x: { grid: { display: false }, ticks: { color: '#444', font: { size: 9, family: 'JetBrains Mono' } } },
+                    y: { grid: { color: '#0a0a0a' }, ticks: { color: '#444', font: { size: 9, family: 'JetBrains Mono' } } }
                 }
             }
         });
 
-        document.getElementById('in-seed').addEventListener('input', refresh);
-        document.getElementById('in-bank').addEventListener('input', refresh);
         refresh();
     </script>
 </body>
